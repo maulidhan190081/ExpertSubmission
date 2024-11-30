@@ -13,15 +13,17 @@ Proses klarifikasi masalah bertujuan untuk memberikan landasan yang kuat dalam m
 
 ### Problem Statements
 1.  Variasi Harga Rumah yang Sulit Diprediksi.
-Harga rumah sangat dipengaruhi oleh berbagai faktor seperti lokasi, fasilitas, ukuran properti, dan tren pasar. Kompleksitas hubungan antarvariabel ini membuat prediksi harga menjadi tantangan, terutama di pasar yang dinamis.
+   
+      Harga rumah sangat dipengaruhi oleh berbagai faktor seperti lokasi, fasilitas, ukuran properti, dan tren pasar. Kompleksitas hubungan antarvariabel ini membuat prediksi harga menjadi tantangan, terutama di pasar yang dinamis.
 
-2. Ketidakakuratan Model Tradisional.
-Metode tradisional seperti regresi linier cenderung tidak dapat menangkap pola non-linear dan dinamika temporal dalam data, sehingga sering menghasilkan prediksi yang kurang akurat.
+2. Membandingkan 2 metode terbaik 
+      
+      Metode yang disarankan untuk mengatasi masalah prediksi harga rumah adalah LSTM dan GRU karena sudah mampu menjawab masalah prediksi data numerik [(Hochreiter & Schmidhuber, 1997; Greff et al., 2017)](https://doi.org/10.1162/neco.1997.9.8.1735);[Cho et al. (2014)](https://aclanthology.org/D14-1179).
 
 ### Goals
-1.  Mengembangkan model prediktif berbasis teknologi modern seperti LSTM dan GRU yang mampu menangkap pola kompleks dan hubungan non-linear dalam data harga rumah.
+1. Mengembangkan model prediktif berbasis teknologi modern seperti LSTM dan GRU yang mampu menangkap pola kompleks dan hubungan non-linear dalam data harga rumah.
 
-2. Mengimplementasikan algoritma deep learning (LSTM dan GRU) yang secara khusus dirancang untuk menangani data yang beragam dan memberikan prediksi harga rumah dengan akurasi lebih tinggi dibanding metode tradisional.
+2. Mengimplementasikan dan membandingkan algoritma deep learning (LSTM dan GRU) yang secara khusus dirancang untuk menangani data yang beragam dan memberikan prediksi harga rumah dengan akurasi lebih tinggi.
 
 ## Data Understanding
 Dataset California Housing Prices dari Kaggle berisi informasi mengenai harga rumah di wilayah California dengan berbagai fitur demografis dan karakteristik rumah. Berikut adalah gambaran umum mengenai isi dataset ini:
@@ -31,11 +33,19 @@ Dataset California Housing Prices dari Kaggle berisi informasi mengenai harga ru
    - Target variabel: median_house_value, yang merupakan harga median dari rumah di wilayah tertentu (dalam dolar AS).
 
 2. Karakteristik Data
-   - Tipe Data: Sebagian besar fitur bersifat kuantitatif, dengan nilai-nilai numerik seperti jumlah kamar dan usia rumah.
-Distribusi Geografis: Data memiliki variasi lokasi yang cukup baik di seluruh California, memungkinkan model untuk menangkap perbedaan harga berdasarkan letak geografis.
-Skala Pendapatan: median_income dalam dataset ini menjadi salah satu indikator penting karena berkorelasi kuat dengan harga rumah.
+   - Tipe Data
+  
+      Sebagian besar fitur bersifat kuantitatif, dengan nilai-nilai numerik seperti jumlah kamar dan usia rumah.
 
-3. link
+   - Distribusi Geografi
+  
+      Data memiliki variasi lokasi yang cukup baik di seluruh California, memungkinkan model untuk menangkap perbedaan harga berdasarkan letak geografis.
+
+   - Skala Pendapatan
+      
+      Median_income dalam dataset ini menjadi salah satu indikator penting karena berkorelasi kuat dengan harga rumah.
+
+1. link
    - https://www.kaggle.com/datasets/camnugent/california-housing-prices
 
    - ### Variabel-variabel pada Restaurant UCI dataset adalah sebagai berikut:
@@ -48,19 +58,22 @@ Skala Pendapatan: median_income dalam dataset ini menjadi salah satu indikator p
       - households: Jumlah rumah tangga di area tersebut.
       - median_income: Pendapatan median dari penduduk di area tersebut (dalam puluhan ribu dolar AS).
       - median_house_value: Nilai median dari harga rumah di area tersebut (ini merupakan target prediksi).
+      - oceanProximity: Lokasi rumah terhadap laut/samudra.
 
-4. Missing value
+2. Missing value
    - Terdapat data yang kosong pada kolom `total_bedrooms` sebanyak 207 data
-
-5. Cara lain memahami data
-   - Cara memahami data adalah dengan cara membaca deskripsi data yang ada pada kaggle dan mengecek inforamasinya melalui Colab
 
 ## Data Preparation
   Saya melakukan beberapa cara agar data menjadi lebih baik sebelum melakukan proses training.
-- Melakukan penegecekan missing value menggunakan `info()` untuk mengetahui inforamasi yang ada pada data seperti: column, Non-null Count, Dtype
-- Melakukan penghapusan terhadap 207 data yang missing value pada kolom `total_bedrooms` menggunakan ```.dropna(inplace=True)``` pada data tersebut, karena dapat mempengaruhi kualitas data. 
-- Karena terdapat data yang bertype objek, maka dilakukan proses merubah data tersebut menjadi boolean menggunakan `onehot encoding`. Tindakan ini dilakukan agar mempermudah proses training data.
-- Kemudian melakukan split data 80% data training dan 20% data test.
+- Feature Selection
+  
+  Melakukan penghapusan terhadap 207 data yang missing value pada kolom `total_bedrooms` menggunakan ```.dropna(inplace=True)``` pada data tersebut, karena dapat mempengaruhi kualitas data. 
+- One-Hot Encoding
+  
+  Karena terdapat data yang bertype objek, maka dilakukan proses merubah data tersebut menjadi boolean menggunakan `onehot encoding`. Tindakan ini dilakukan agar mempermudah proses training data.
+- Split Data
+  
+  Kemudian melakukan split data 80% data training dan 20% data test.
 
 ## Modeling
 Saya menggunakan metode LSTM dan GRU sebagai pembanding. Parameter yang saya digunakan sebagai berikut:
@@ -75,18 +88,52 @@ Saya menggunakan metode LSTM dan GRU sebagai pembanding. Parameter yang saya dig
 
 ### LSTM
 
-LSTM (Long Short-Term Memory) adalah jaringan saraf tiruan yang dirancang untuk memproses data sekuensial dengan menangkap pola jangka panjang. LSTM mengatasi kelemahan utama RNN tradisional, yaitu *vanishing gradient*, melalui penggunaan tiga jenis *gate* (input, forget, dan output gate) yang memungkinkan kontrol atas informasi mana yang harus disimpan, dilupakan, atau digunakan. Hal ini membuat LSTM sangat cocok untuk tugas-tugas seperti prediksi time-series, pemrosesan bahasa alami, dan pengenalan suara [(Hochreiter & Schmidhuber, 1997; Greff et al., 2017)](https://doi.org/10.1162/neco.1997.9.8.1735).
+- Penjelasan
 
-Keunggulan utama LSTM adalah fleksibilitasnya dalam menangkap pola kompleks dalam data yang memiliki hubungan temporal atau dependensi antar fitur. Mekanisme memorinya memungkinkan model ini mempertahankan informasi penting dari konteks sebelumnya, sehingga efektif dalam aplikasi seperti peramalan harga saham, analisis sentimen, dan prediksi harga rumah. Namun, dibandingkan dengan model lain seperti GRU, LSTM lebih kompleks secara komputasi dan memerlukan dataset besar untuk mencapai performa optimal [(Gers et al., 2000; Siami-Namini et al., 2019)](https://doi.org/10.1162/089976600300015015).
+   LSTM (Long Short-Term Memory) adalah jaringan saraf tiruan yang dirancang untuk memproses data sekuensial dengan menangkap pola jangka panjang. LSTM mengatasi kelemahan utama RNN tradisional, yaitu *vanishing gradient*, melalui penggunaan tiga jenis *gate* (input, forget, dan output gate) yang memungkinkan kontrol atas informasi mana yang harus disimpan, dilupakan, atau digunakan. Hal ini membuat LSTM sangat cocok untuk tugas-tugas seperti prediksi time-series, pemrosesan bahasa alami, dan pengenalan suara [(Hochreiter & Schmidhuber, 1997; Greff et al., 2017)](https://doi.org/10.1162/neco.1997.9.8.1735).
 
-Kekurangan LSTM mencakup waktu pelatihan yang lebih lama dan sensitivitas terhadap parameter model. Selain itu, jika dataset kecil atau tidak representatif, LSTM rentan terhadap overfitting. Dalam kasus data non-time series atau kebutuhan prediksi cepat, algoritma seperti Random Forest atau XGBoost dapat menjadi alternatif yang lebih praktis [(Greff et al., 2017; Siami-Namini et al., 2019)](https://doi.org/10.1109/TNNLS.2016.2582924).
+- Keunggulan
+
+   Keunggulan utama LSTM adalah fleksibilitasnya dalam menangkap pola kompleks dalam data yang memiliki hubungan temporal atau dependensi antar fitur. Mekanisme memorinya memungkinkan model ini mempertahankan informasi penting dari konteks sebelumnya, sehingga efektif dalam aplikasi seperti peramalan harga saham, analisis sentimen, dan prediksi harga rumah. Namun, dibandingkan dengan model lain seperti GRU, LSTM lebih kompleks secara komputasi dan memerlukan dataset besar untuk mencapai performa optimal [(Gers et al., 2000; Siami-Namini et al., 2019)](https://doi.org/10.1162/089976600300015015).
+
+- Kekurangan
+
+   Kekurangan LSTM mencakup waktu pelatihan yang lebih lama dan sensitivitas terhadap parameter model. Selain itu, jika dataset kecil atau tidak representatif, LSTM rentan terhadap overfitting. Dalam kasus data non-time series atau kebutuhan prediksi cepat, algoritma seperti Random Forest atau XGBoost dapat menjadi alternatif yang lebih praktis [(Greff et al., 2017; Siami-Namini et al., 2019)](https://doi.org/10.1109/TNNLS.2016.2582924).
+
+- Alur
+  - Dalam proses ini, data terlebih dahulu di-*scaling* menggunakan `MinMaxScaler` untuk memastikan semua fitur memiliki nilai dalam rentang tertentu, sehingga mempermudah proses pembelajaran model. 
+  - Data pelatihan (`X_train` dan `y_train`) di-*fit_transform*, sedangkan data pengujian (`X_test` dan `y_test`) hanya di-*transform* agar konsisten dengan skala data pelatihan. 
+  - Selanjutnya, data di-*reshape* ke format 3D `(samples, timesteps, features)` agar kompatibel dengan input model `LSTM (Long Short-Term Memory)`, yang dirancang untuk data berurutan. 
+  - Model LSTM dibuat dengan lapisan tersembunyi yang terdiri dari 50 unit, fungsi aktivasi `relu`, dan lapisan keluaran `Dense` dengan fungsi aktivasi `linear` untuk prediksi nilai kontinu. 
+  - Model dikompilasi menggunakan optimizer `adam` dan metrik evaluasi  `Mean Squared Error (MSE)`. 
+  - Setelah pelatihan model pada data pelatihan dengan beberapa `epochs` dan ukuran `batch` yang ditentukan, prediksi dilakukan pada data pengujian. 
+  - Akhirnya, model dievaluasi menggunakan metrik `MSE` untuk mengukur tingkat kesalahan prediksi terhadap data yang telah di-*scaled*.
+
 
 ### GRU
-GRU (Gated Recurrent Unit) adalah jenis jaringan saraf tiruan yang termasuk dalam keluarga Recurrent Neural Network (RNN). GRU diperkenalkan oleh [Cho et al. (2014)](https://aclanthology.org/D14-1179) sebagai alternatif yang lebih sederhana daripada LSTM. Sama seperti LSTM, GRU dirancang untuk mengatasi masalah *vanishing gradient* yang sering terjadi pada RNN, dengan menggunakan dua jenis gate, yaitu *update gate* dan *reset gate*, untuk mengontrol informasi yang diteruskan melalui jaringan. Perbedaan utama antara GRU dan LSTM adalah bahwa GRU tidak memiliki *forget gate* dan lebih sederhana dalam struktur, dengan hanya dua gate dibandingkan dengan tiga pada LSTM.
 
-Keunggulan utama GRU adalah kesederhanaannya. Dibandingkan dengan LSTM, GRU memiliki lebih sedikit parameter dan lebih cepat dalam pelatihan, sehingga lebih efisien dalam hal waktu komputasi dan memori, terutama ketika berhadapan dengan dataset yang besar atau ketika sumber daya komputasi terbatas [Cho et al. (2014)](https://aclanthology.org/D14-1179); [Chung et al., 2014](https://papers.nips.cc/paper/2014/hash/5f8f5b1684b5ad5b5444e6f3d2cc9c72-Abstract.html). Selain itu, GRU sering kali memberikan performa yang sebanding dengan LSTM dalam banyak aplikasi, tetapi dengan waktu pelatihan yang lebih cepat.
+- Penjelasan
+   
+   GRU (Gated Recurrent Unit) adalah jenis jaringan saraf tiruan yang termasuk dalam keluarga Recurrent Neural Network (RNN). GRU diperkenalkan oleh [Cho et al. (2014)](https://aclanthology.org/D14-1179) sebagai alternatif yang lebih sederhana daripada LSTM. Sama seperti LSTM, GRU dirancang untuk mengatasi masalah *vanishing gradient* yang sering terjadi pada RNN, dengan menggunakan dua jenis gate, yaitu *update gate* dan *reset gate*, untuk mengontrol informasi yang diteruskan melalui jaringan. Perbedaan utama antara GRU dan LSTM adalah bahwa GRU tidak memiliki *forget gate* dan lebih sederhana dalam struktur, dengan hanya dua gate dibandingkan dengan tiga pada LSTM.
 
-Namun, GRU juga memiliki kekurangan. Meskipun lebih efisien, GRU mungkin tidak selalu dapat menangkap hubungan jangka panjang dalam data dengan kualitas yang sama seperti LSTM, terutama pada tugas-tugas yang membutuhkan ketepatan memori yang lebih baik. Selain itu, dalam beberapa kasus, GRU mungkin tidak dapat menggantikan LSTM pada masalah yang sangat kompleks, seperti peramalan time series yang sangat bergantung pada konteks jangka panjang ([Chung et al., 2014](https://papers.nips.cc/paper/2014/hash/5f8f5b1684b5ad5b5444e6f3d2cc9c72-Abstract.html); [Li et al., 2019](https://doi.org/10.1155/2019/8326093)).
+- Keunggulan
+
+   Keunggulan utama GRU adalah kesederhanaannya. Dibandingkan dengan LSTM, GRU memiliki lebih sedikit parameter dan lebih cepat dalam pelatihan, sehingga lebih efisien dalam hal waktu komputasi dan memori, terutama ketika berhadapan dengan dataset yang besar atau ketika sumber daya komputasi terbatas [Cho et al. (2014)](https://aclanthology.org/D14-1179); [Chung et al., 2014](https://papers.nips.cc/paper/2014/hash/5f8f5b1684b5ad5b5444e6f3d2cc9c72-Abstract.html). Selain itu, GRU sering kali memberikan performa yang sebanding dengan LSTM dalam banyak aplikasi, tetapi dengan waktu pelatihan yang lebih cepat.
+
+- Kekurangan
+
+   Namun, GRU juga memiliki kekurangan. Meskipun lebih efisien, GRU mungkin tidak selalu dapat menangkap hubungan jangka panjang dalam data dengan kualitas yang sama seperti LSTM, terutama pada tugas-tugas yang membutuhkan ketepatan memori yang lebih baik. Selain itu, dalam beberapa kasus, GRU mungkin tidak dapat menggantikan LSTM pada masalah yang sangat kompleks, seperti peramalan time series yang sangat bergantung pada konteks jangka panjang ([Chung et al., 2014](https://papers.nips.cc/paper/2014/hash/5f8f5b1684b5ad5b5444e6f3d2cc9c72-Abstract.html); [Li et al., 2019](https://doi.org/10.1155/2019/8326093)).
+
+- Alur
+  
+  - Dalam proses ini, data di-*scaling* menggunakan `MinMaxScaler` untuk memastikan semua fitur memiliki nilai dalam rentang tertentu, mempermudah pembelajaran model. 
+  - Data pelatihan (`X_train` dan `y_train`) di-*fit_transform*, sementara data pengujian (`X_test` dan `y_test`) di-*transform* untuk konsistensi skala. 
+  - Setelah itu, data di-*reshape* ke format 3D `(samples, timesteps, features)` agar kompatibel dengan model `GRU (Gated Recurrent Unit)`, yang dirancang untuk menangani data berurutan. 
+  - Model GRU dibangun dengan satu lapisan tersembunyi berisi 50 unit, menggunakan fungsi aktivasi `relu` dan lapisan keluaran `Dense` untuk prediksi nilai kontinu. 
+  - Model dikompilasi menggunakan optimizer `adam` dan fungsi kerugian berupa rata-rata kuadrat kesalahan atau `Mean Squared Error (MSE)`. 
+  - Setelah proses pelatihan pada data pelatihan dengan beberapa `epochs` dan ukuran `batch` yang telah ditentukan, model digunakan untuk memprediksi data pengujian. 
+  - Kinerja model dievaluasi menggunakan metrik `MSE` untuk mengukur seberapa baik prediksi dibandingkan dengan data yang telah di-*scaled*.
+
 
 
 
@@ -103,6 +150,8 @@ Grafik ini membandingkan performa dua model, **LSTM (Long Short-Term Memory)** d
 Grafik ini menunjukkan perbandingan **training loss** antara model **LSTM** dan **GRU** selama proses pelatihan pada tugas prediksi harga rumah. Sumbu horizontal merepresentasikan jumlah **epoch** (jumlah iterasi pelatihan), sedangkan sumbu vertikal menunjukkan nilai **loss**, yang menggambarkan seberapa besar kesalahan model selama pelatihan. Pada awal pelatihan (epoch 0-2), kedua model mengalami penurunan loss yang signifikan. Namun, setelah beberapa epoch, penurunan loss menjadi lebih stabil dan perlahan mendekati nilai minimum.
 
 Model GRU (garis oranye) secara konsisten memiliki nilai loss yang sedikit lebih rendah dibandingkan LSTM (garis biru), menunjukkan bahwa GRU belajar lebih cepat dan lebih efisien dalam mengurangi kesalahan selama pelatihan. Pada akhir pelatihan, kedua model hampir konvergen dengan nilai loss sekitar **0.015**, namun GRU tetap unggul dalam hal performa pelatihan. Perbandingan ini mengindikasikan bahwa GRU dapat menjadi pilihan yang lebih baik untuk tugas prediksi harga rumah, terutama ketika efisiensi pelatihan menjadi pertimbangan.
+
+kedua metode tersebut sudah menjawab Problem Statements dan mencapai goals yang dituju yaitu berhasil mengambangkan model prediktif untuk pola kompleks dan hubungan non-linear dalam data harga rumah. Kedua metode tersebut menampilkan hasil nilai error yang terbilang cukup kecil untuk masalah sebesar prediksi harga rumah dengan menggunakan banyak fitur. Untuk selanjutnya bisa melakukan penelitian dengan metode berbeda dengan metode yang telah digunakan untuk menambah referensi untuk prediksi harga rumah.
 
 ## Conclusion
 
