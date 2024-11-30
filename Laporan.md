@@ -16,14 +16,14 @@ Proses klarifikasi masalah bertujuan untuk memberikan landasan yang kuat dalam m
    
       Harga rumah sangat dipengaruhi oleh berbagai faktor seperti lokasi, fasilitas, ukuran properti, dan tren pasar. Kompleksitas hubungan antarvariabel ini membuat prediksi harga menjadi tantangan, terutama di pasar yang dinamis.
 
-2. Membandingkan 2 metode terbaik 
+2. Mencari metode terbaik 
       
       Metode yang disarankan untuk mengatasi masalah prediksi harga rumah adalah LSTM dan GRU karena sudah mampu menjawab masalah prediksi data numerik [(Hochreiter & Schmidhuber, 1997; Greff et al., 2017)](https://doi.org/10.1162/neco.1997.9.8.1735);[Cho et al. (2014)](https://aclanthology.org/D14-1179).
 
 ### Goals
 1. Mengembangkan model prediktif berbasis teknologi modern seperti LSTM dan GRU yang mampu menangkap pola kompleks dan hubungan non-linear dalam data harga rumah.
 
-2. Mengimplementasikan dan membandingkan algoritma deep learning (LSTM dan GRU) yang secara khusus dirancang untuk menangani data yang beragam dan memberikan prediksi harga rumah dengan akurasi lebih tinggi.
+2. Memperoleh metode terbaik antara algoritma deep learning (LSTM dan GRU) yang sudah secara khusus dirancang untuk menangani data yang beragam dan sangat disarankan untuk prediksi harga rumah.
 
 ## Data Understanding
 Dataset California Housing Prices dari Kaggle berisi informasi mengenai harga rumah di wilayah California dengan berbagai fitur demografis dan karakteristik rumah. Berikut adalah gambaran umum mengenai isi dataset ini:
@@ -151,7 +151,7 @@ Grafik ini menunjukkan perbandingan **training loss** antara model **LSTM** dan 
 
 Model GRU (garis oranye) secara konsisten memiliki nilai loss yang sedikit lebih rendah dibandingkan LSTM (garis biru), menunjukkan bahwa GRU belajar lebih cepat dan lebih efisien dalam mengurangi kesalahan selama pelatihan. Pada akhir pelatihan, kedua model hampir konvergen dengan nilai loss sekitar **0.015**, namun GRU tetap unggul dalam hal performa pelatihan. Perbandingan ini mengindikasikan bahwa GRU dapat menjadi pilihan yang lebih baik untuk tugas prediksi harga rumah, terutama ketika efisiensi pelatihan menjadi pertimbangan.
 
-kedua metode tersebut sudah menjawab Problem Statements dan mencapai goals yang dituju yaitu berhasil mengambangkan model prediktif untuk pola kompleks dan hubungan non-linear dalam data harga rumah. Kedua metode tersebut menampilkan hasil nilai error yang terbilang cukup kecil untuk masalah sebesar prediksi harga rumah dengan menggunakan banyak fitur. Untuk selanjutnya bisa melakukan penelitian dengan metode berbeda dengan metode yang telah digunakan untuk menambah referensi untuk prediksi harga rumah.
+Kedua metode tersebut sudah menjawab Problem Statements dan mencapai goals yang dituju yaitu berhasil mengambangkan model prediktif untuk pola kompleks dan hubungan non-linear dalam data harga rumah. Kedua metode tersebut menampilkan hasil nilai error yang terbilang cukup kecil untuk masalah sebesar prediksi harga rumah dengan menggunakan banyak fitur. Untuk selanjutnya bisa melakukan penelitian dengan metode berbeda dengan metode yang telah digunakan untuk menambah referensi untuk prediksi harga rumah.
 
 ## Conclusion
 
