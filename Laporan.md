@@ -65,7 +65,7 @@ Dataset California Housing Prices dari Kaggle berisi informasi mengenai harga ru
 
 ## Data Preparation
   Saya melakukan beberapa cara agar data menjadi lebih baik sebelum melakukan proses training.
-- Feature Selection
+- Handling missing value
   
   Melakukan penghapusan terhadap 207 data yang missing value pada kolom `total_bedrooms` menggunakan ```.dropna(inplace=True)``` pada data tersebut, karena dapat mempengaruhi kualitas data. 
 - One-Hot Encoding
@@ -74,6 +74,11 @@ Dataset California Housing Prices dari Kaggle berisi informasi mengenai harga ru
 - Split Data
   
   Kemudian melakukan split data 80% data training dan 20% data test.
+
+- Standarisasi dan Reshape
+  - Dalam proses ini, data terlebih dahulu di-*scaling* menggunakan `MinMaxScaler` untuk memastikan semua fitur memiliki nilai dalam rentang tertentu, sehingga mempermudah proses pembelajaran model. 
+  - Data pelatihan (`X_train` dan `y_train`) di-*fit_transform*, sedangkan data pengujian (`X_test` dan `y_test`) hanya di-*transform* agar konsisten dengan skala data pelatihan. 
+  - Selanjutnya, data di-*reshape* ke format 3D `(samples, timesteps, features)` agar kompatibel dengan input model `LSTM (Long Short-Term Memory)` dan `GRU (Gated Recurrent Unit)`, yang dirancang untuk data berurutan.
 
 ## Modeling
 Saya menggunakan metode LSTM dan GRU sebagai pembanding. Parameter yang saya digunakan sebagai berikut:
@@ -100,10 +105,7 @@ Saya menggunakan metode LSTM dan GRU sebagai pembanding. Parameter yang saya dig
 
    Kekurangan LSTM mencakup waktu pelatihan yang lebih lama dan sensitivitas terhadap parameter model. Selain itu, jika dataset kecil atau tidak representatif, LSTM rentan terhadap overfitting. Dalam kasus data non-time series atau kebutuhan prediksi cepat, algoritma seperti Random Forest atau XGBoost dapat menjadi alternatif yang lebih praktis [(Greff et al., 2017; Siami-Namini et al., 2019)](https://doi.org/10.1109/TNNLS.2016.2582924).
 
-- Alur
-  - Dalam proses ini, data terlebih dahulu di-*scaling* menggunakan `MinMaxScaler` untuk memastikan semua fitur memiliki nilai dalam rentang tertentu, sehingga mempermudah proses pembelajaran model. 
-  - Data pelatihan (`X_train` dan `y_train`) di-*fit_transform*, sedangkan data pengujian (`X_test` dan `y_test`) hanya di-*transform* agar konsisten dengan skala data pelatihan. 
-  - Selanjutnya, data di-*reshape* ke format 3D `(samples, timesteps, features)` agar kompatibel dengan input model `LSTM (Long Short-Term Memory)`, yang dirancang untuk data berurutan. 
+- Alur 
   - Model LSTM dibuat dengan lapisan tersembunyi yang terdiri dari 50 unit, fungsi aktivasi `relu`, dan lapisan keluaran `Dense` dengan fungsi aktivasi `linear` untuk prediksi nilai kontinu. 
   - Model dikompilasi menggunakan optimizer `adam` dan metrik evaluasi  `Mean Squared Error (MSE)`. 
   - Setelah pelatihan model pada data pelatihan dengan beberapa `epochs` dan ukuran `batch` yang ditentukan, prediksi dilakukan pada data pengujian. 
@@ -125,10 +127,7 @@ Saya menggunakan metode LSTM dan GRU sebagai pembanding. Parameter yang saya dig
    Namun, GRU juga memiliki kekurangan. Meskipun lebih efisien, GRU mungkin tidak selalu dapat menangkap hubungan jangka panjang dalam data dengan kualitas yang sama seperti LSTM, terutama pada tugas-tugas yang membutuhkan ketepatan memori yang lebih baik. Selain itu, dalam beberapa kasus, GRU mungkin tidak dapat menggantikan LSTM pada masalah yang sangat kompleks, seperti peramalan time series yang sangat bergantung pada konteks jangka panjang ([Chung et al., 2014](https://papers.nips.cc/paper/2014/hash/5f8f5b1684b5ad5b5444e6f3d2cc9c72-Abstract.html); [Li et al., 2019](https://doi.org/10.1155/2019/8326093)).
 
 - Alur
-  
-  - Dalam proses ini, data di-*scaling* menggunakan `MinMaxScaler` untuk memastikan semua fitur memiliki nilai dalam rentang tertentu, mempermudah pembelajaran model. 
-  - Data pelatihan (`X_train` dan `y_train`) di-*fit_transform*, sementara data pengujian (`X_test` dan `y_test`) di-*transform* untuk konsistensi skala. 
-  - Setelah itu, data di-*reshape* ke format 3D `(samples, timesteps, features)` agar kompatibel dengan model `GRU (Gated Recurrent Unit)`, yang dirancang untuk menangani data berurutan. 
+
   - Model GRU dibangun dengan satu lapisan tersembunyi berisi 50 unit, menggunakan fungsi aktivasi `relu` dan lapisan keluaran `Dense` untuk prediksi nilai kontinu. 
   - Model dikompilasi menggunakan optimizer `adam` dan fungsi kerugian berupa rata-rata kuadrat kesalahan atau `Mean Squared Error (MSE)`. 
   - Setelah proses pelatihan pada data pelatihan dengan beberapa `epochs` dan ukuran `batch` yang telah ditentukan, model digunakan untuk memprediksi data pengujian. 
